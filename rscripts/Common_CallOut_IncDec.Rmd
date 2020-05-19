@@ -1,0 +1,55 @@
+---
+title: ""
+author: ""
+date: ""
+output: 
+   word_document:
+     df_print: kable
+     reference_docx: word-styles-reference.docx
+---
+  
+```{r, a, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo=T)
+```
+
+**`r keyphrase`: Largest Increases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section)`
+
+
+*From `r maxyr-1`:* 
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal")`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal")`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal")`
+
+
+```{r a1, echo = FALSE, warning=FALSE}
+  
+```
+
+**`r keyphrase`: Largest Decreases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section)`
+
+*From `r maxyr-1`:*
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal")`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal")`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal")`

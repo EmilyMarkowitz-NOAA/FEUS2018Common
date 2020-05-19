@@ -1,0 +1,23 @@
+---
+title: ""
+author: ""
+date: ""
+output: 
+  word_document:
+  df_print: kable
+reference_docx: word-styles-reference.docx
+---
+  
+```{r, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo=T)
+```
+
+# `r ifelse(place %in% "United States", place, paste0(place, " Region")) `
+
+`r ifelse(place %in% "United States", "", paste0( " - ", paste(as.character(states_names), collapse = '\n\n - ')) ) `
+
+## Management Context
+
+### Policy Updates
+
+`r ifelse(is.na(policytrends$Content[policytrends$Region %in% place & policytrends$Section %in% "Policy"]), "", policytrends$Content[policytrends$Region %in% place & policytrends$Section %in% "Policy"]) `

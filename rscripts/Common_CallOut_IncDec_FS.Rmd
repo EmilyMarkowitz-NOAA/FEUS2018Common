@@ -1,0 +1,115 @@
+---
+title: ""
+author: ""
+date: ""
+output: 
+   word_document:
+     df_print: kable
+     reference_docx: word-styles-reference.docx
+---
+  
+```{r, a0, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo=T)
+```
+
+# Sorted by Absolute Value
+
+## `r ifelse(reg == st, reg, paste0(reg," - ", st) ) `
+
+```{r, a1, echo=FALSE, warning=FALSE}
+absvalueTF<-TRUE
+orgby<-"abs"
+```
+
+**`r keyphrase`: Largest Increases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
+*From `r maxyr-1`:* 
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
+```{r, a2, echo=FALSE, warning=FALSE}
+  
+```
+
+**`r keyphrase`: Largest Decreases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+*From `r maxyr-1`:*
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
+# Sorted by Percent
+
+```{r, a3, echo=FALSE, warning=FALSE}
+orgby<-"pct"
+```
+
+**`r keyphrase`: Largest Increases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = T, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
+*From `r maxyr-1`:* 
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = T, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
+```{r, a4, echo=FALSE, warning=FALSE}
+  
+```
+
+**`r keyphrase`: Largest Decreases**
+
+*From `r minyr`:*
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=1, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=2, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YR10", decreasingTF = F, yr=minyr, lv=3, capitalizefirst=capitalizefirst, section=section, orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+*From `r maxyr-1`:*
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=1, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=2, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+`r text_liststocks(dat=dat, metric = "YOY", decreasingTF = F, yr=maxyr-1, lv=3, capitalizefirst=capitalizefirst, section="nominal", orgby = orgby, absvalue=absvalueTF, pctvalue=pctvalueTF, preunit = preunit, postunit = postunit)`
+
+
