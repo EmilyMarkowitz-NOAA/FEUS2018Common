@@ -68,6 +68,9 @@ dir.common<-paste0(dir.parent, "/FEUS",maxyr,"Common/")
 dir.output<-paste0(dir.in, "/output/")
 # dir.create(dir.output)
 dir.data<-paste0(dir.in, "/data/")
+dir.rscripts<-paste0(dir.in, "/rscripts/")
+dir.data.common<-paste0(dir.common, "/data/")
+dir.rscripts.common<-paste0(dir.common, "/rscripts/")
 
 ######CREATE DIRECTORIES#####
 dir.out<-paste0(dir.output, sectname0, "_", date00, 
@@ -114,57 +117,52 @@ file.copy(from = paste0(dir.parent, "/Common/word-styles-reference.docx"),
           overwrite = T)
 
 
-###***GDP INFLATION#####
-# Calculation the inflation adjustment rate from the minyr to the maxyr
-# to use in calculating changes in dollar values in real terms (inflation adjusted)
-#GDP DEFLATOR
-gdpdefl <- read.csv(paste0(dir.data, "gdpdef_stfed.csv"))
-inflation<-gdpdefl[gdpdefl$YEAR == maxyr,names(gdpdefl)=="GDPDEF"]/gdpdefl[gdpdefl$YEAR == minyr,names(gdpdefl)=="GDPDEF"]
 
-###***STATE INFO####
-#General Info
-State <- c("Alabama", "Alaska", "California", "Connecticut", 
-           "Delaware", "East Florida", "West Florida", "Georgia", "Hawai`i", 
-           "Louisiana", "Maine", "Maryland", "Massachusetts", 
-           "Mississippi", "New Hampshire", "New Jersey", "New York", 
-           "North Carolina", "Oregon", "Rhode Island", "South Carolina", 
-           "Texas",  "Virginia", "Washington", "Pacific At-Sea Processors") # states in order
+##***STATE INFO####
+# General Info
+# State <- c("Alabama", "Alaska", "California", "Connecticut",
+#            "Delaware", "East Florida", "West Florida", "Georgia", "Hawai`i",
+#            "Louisiana", "Maine", "Maryland", "Massachusetts",
+#            "Mississippi", "New Hampshire", "New Jersey", "New York",
+#            "North Carolina", "Oregon", "Rhode Island", "South Carolina",
+#            "Texas",  "Virginia", "Washington", "Pacific At-Sea Processors") # states in order
+# 
+# State1<-State
+# State1[grep(pattern = "Florida", x = State)]<-"Florida"
+# State1[grep(pattern = "Hawai`i", x = State)]<-"Hawaii"
+# State1[grep(pattern = "Pacific At-Sea Processors", x = State)]<-"At-Sea Process, Pac."
+# 
+# Region <- c("Gulf of Mexico", "North Pacific", "Pacific", "New England",
+#             "Mid-Atlantic", "South Atlantic", "Gulf of Mexico", "South Atlantic",
+#             "Western Pacific (Hawai`i)",
+#             "Gulf of Mexico", "New England", "Mid-Atlantic", "New England",
+#             "Gulf of Mexico", "New England", "Mid-Atlantic", "Mid-Atlantic",
+#             "South Atlantic", "Pacific", "New England", "South Atlantic",
+#             "Gulf of Mexico",  "Mid-Atlantic", "Pacific", "Pacific") # states in order
+# 
+# fips <- c(1 ,2 ,6 ,9 ,10, 12, 12, 13, 15, 22,23,24,25,28,33,34,36,37,41,44,45,48,51,53, 0)
+# xstate<-c("1", "1", "1", "1", "1", "1", "2", "2", "1", "3", "2", "2", "3", "4",
+#           "4", "3", "4", "3", "2", "5", "4", "5",  "5", "3", "4") #state chapter order
+# xreg<-c("7", "1", "2", "4", "5", "6", "7", "6", "3", "7", "4", "5", "4", "7",
+#         "4", "5", "5", "6", "2", "4", "6", "7",  "5", "2", "2") #region chapter order
+# abbvst <- c("AL", "AK", "CA", "CT", "DE", "EFL", "WFL", "GA", "HI",
+#           "LA", "ME", "MD", "MA", "MI", "NH", "NJ", "NY",
+#           "NC", "OR", "RI", "SC", "TX",  "VA", "WA", "Proc") #
+# abbvreg <- c("GOM", "NP", "Pac", "NE",
+#             "MA", "SA", "GOM", "SA", "WP",
+#             "GOM", "NE", "MA", "NE",
+#             "GOM", "NE", "MA", "MA",
+#             "SA", "Pac", "NE", "SA",
+#             "GOM",  "MA", "Pac", "Pac") #
+# 
+# State.no <- c(1, 2, 5, 7, 8 ,10 ,11 ,13 ,14 ,21 ,22 ,23 ,24 ,27 ,32 ,33 ,35 ,36 ,40 ,42 ,43 ,46 ,49 ,50 ,98) # states in order
+# 
+# Region.no <- c(5, 7, 6, 1, 2, 4, 5, 4, 8, 5, 1, 2, 1, 5, 1, 2, 2, 4, 6, 1, 4, 5, 2, 6, 6) # states in order
+# subreg<-NA
+# 
+# statereg <- data.frame(State, State1, fips, Region, abbvst, abbvreg, xstate, xreg, State.no, Region.no, subreg)
+# write.csv(x = statereg, file = paste0(dir.data.common, "statereg.csv"))
 
-State1<-State
-State1[grep(pattern = "Florida", x = State)]<-"Florida"
-State1[grep(pattern = "Hawai`i", x = State)]<-"Hawaii"
-State1[grep(pattern = "Pacific At-Sea Processors", x = State)]<-"At-Sea Process, Pac."
-
-Region <- c("Gulf of Mexico", "North Pacific", "Pacific", "New England", 
-            "Mid-Atlantic", "South Atlantic", "Gulf of Mexico", "South Atlantic", 
-            "Western Pacific (Hawai`i)", 
-            "Gulf of Mexico", "New England", "Mid-Atlantic", "New England", 
-            "Gulf of Mexico", "New England", "Mid-Atlantic", "Mid-Atlantic", 
-            "South Atlantic", "Pacific", "New England", "South Atlantic", 
-            "Gulf of Mexico",  "Mid-Atlantic", "Pacific", "Pacific") # states in order
-
-fips <- c(1 ,2 ,6 ,9 ,10, 12, 12, 13, 15, 22,23,24,25,28,33,34,36,37,41,44,45,48,51,53, 0)
-xstate<-c("1", "1", "1", "1", "1", "1", "2", "2", "1", "3", "2", "2", "3", "4", 
-          "4", "3", "4", "3", "2", "5", "4", "5",  "5", "3", "4") #state chapter order
-xreg<-c("7", "1", "2", "4", "5", "6", "7", "6", "3", "7", "4", "5", "4", "7", 
-        "4", "5", "5", "6", "2", "4", "6", "7",  "5", "2", "2") #region chapter order
-abbvst <- c("AL", "AK", "CA", "CT", "DE", "EFL", "WFL", "GA", "HI", 
-            "LA", "ME", "MD", "MA", "MI", "NH", "NJ", "NY",  
-            "NC", "OR", "RI", "SC", "TX",  "VA", "WA", "Proc") # 
-abbvreg <- c("GOM", "NP", "Pac", "NE", 
-             "MA", "SA", "GOM", "SA", "WP", 
-             "GOM", "NE", "MA", "NE", 
-             "GOM", "NE", "MA", "MA", 
-             "SA", "Pac", "NE", "SA", 
-             "GOM",  "MA", "Pac", "Pac") # 
-
-State.no <- c(1, 2, 5, 7, 8 ,10 ,11 ,13 ,14 ,21 ,22 ,23 ,24 ,27 ,32 ,33 ,35 ,36 ,40 ,42 ,43 ,46 ,49 ,50 ,98) # states in order
-
-Region.no <- c(5, 7, 6, 1, 2, 4, 5, 4, 8, 5, 1, 2, 1, 5, 1, 2, 2, 4, 6, 1, 4, 5, 2, 6, 6) # states in order
-
-statereg <- data.frame(State, State1, fips, Region, abbvst, abbvreg, xstate, xreg, State.no, Region.no)
-write.csv(x = statereg, file = paste0(dir.data, "statereg.csv"))
-write.csv(x = statereg, file = paste0(dir.data, "statereg.csv"))
 
 #####KNOWNS#####
 states.all.coastal<-c("Hawai`i", "Rhode Island", "Delaware", "West Florida", "East Florida")
@@ -184,7 +182,7 @@ Footnotes.list.Common<-list(
   "ft_Data" = "See data sources section for more information about where each region or state's data comes from." ,
   "ft_999" = "In this table, '<1' = 0-999 fish, and '1' = 1,000-1,499 fish.",
   "ft_na" = "'NA' = not available.", 
-  "ft_FEUStool" = "Summary data is available online in the FEUS webtool [Available at: https://www.st.nmfs.noaa.gov/data-and-tools/FEUS/explore-the-data]."
+  "ft_FEUStool" = "Summary data is available online in the FEUS webtool. [Available at: https://www.st.nmfs.noaa.gov/data-and-tools/FEUS/explore-the-data.]"
 )
 
 reg.order<-c("North Pacific", "Pacific", "Western Pacific (Hawai`i)", "New England", "Mid-Atlantic", "South Atlantic", "Gulf of Mexico") 
@@ -259,7 +257,7 @@ list2string.webtool<-function(x) {
     xx[nro]<-ifelse(str0[1] %in% c("", "[]", "null"), 
                     'null', 
                     paste0('"', paste(str0, collapse = '|'), '"'))
-    # paste0('["', paste(str0, collapse = '", "'), '"]'))
+                 # paste0('["', paste(str0, collapse = '", "'), '"]'))
     # gsub(pattern = "'", replacement = '"', x = a)
   }
   return(as.character(xx))
@@ -328,7 +326,7 @@ funct_df2js<-function(df.dat, minyr, maxyr) {
   # str0<-gsub(pattern = "/[/'", replacement = "/[`", x = str0)
   # str0<-gsub(pattern = "'/]", replacement = "/]`", x = str0)
   # str0<-gsub(pattern = '\\[\"', replacement = '\\["', x = str0)
-  
+
   # str0<-gsub(pattern = '\\\"', replacement = '"', x = str0, fixed = T)
   str0<-gsub(pattern = '\\\"', replacement = '', x = str0, fixed = T)
   str0<-gsub(pattern = '\\.\\]', replacement = '\\.\\"\\]', x = str0)
@@ -375,68 +373,68 @@ text_liststocks<-function(dat, metric, orgby = "pct", absvalue=F, pctvalue=T,
   #Anything to note?
   
   #No
-  if (ifelse(orgby == "pct", is.na(pctval), is.na(absval)) | 
-      ifelse(orgby == "pct", 
-             ifelse(decreasingTF==T, pctval<0, pctval>0), 
-             ifelse(decreasingTF==T, absval<100000, absval>100000) )) { #a wrong value (i.e. NA or negative for increasing visa versa)
-    if (lv == 1) { #first value doesn't have anything useful
-      str0<-paste0(str0, 
-                   paste0("There were no ", 
-                          ifelse(orgby == "pct", "percent ", "monitary "), 
-                          ifelse(decreasingTF==T, "increases", "decreases"),
-                          ifelse(section %in% "nominal", " (in nominal dollar values)", ""),
-                          "."))
-    } else { #other values qualified and there are no more
-      str0<-""
-    }
-    
-    #Yes!
-  } else {
-    
-    str0<-paste0(str0, org, " (")
-    
-    #PERCENT VALUE
-    if (pctvalue == T) {
-      #Nominal Values
-      str0.pct<-xunitspct(pctval)
-      
-      #REAL TERMS
-      if (metric %in% "YR10" & section %in% "real terms") { #if a correct value and realterms = T (realterms only applicable for money aka revenue or price)
-        datcol.real<-dat[which(colnames(dat) %in% paste0(metric, ".infl.pct"))]
-        val.real<-100*(datcol.real[lv,])
-        
-        str0.pct<-paste0(str0.pct,  
-                         ", ", 
-                         xunitspct(val.real),
-                         " in real terms")
-        
+    if (ifelse(orgby == "pct", is.na(pctval), is.na(absval)) | 
+        ifelse(orgby == "pct", 
+               ifelse(decreasingTF==T, pctval<0, pctval>0), 
+               ifelse(decreasingTF==T, absval<100000, absval>100000) )) { #a wrong value (i.e. NA or negative for increasing visa versa)
+      if (lv == 1) { #first value doesn't have anything useful
+        str0<-paste0(str0, 
+                     paste0("There were no ", 
+                            ifelse(orgby == "pct", "percent ", "monitary "), 
+                            ifelse(decreasingTF==T, "increases", "decreases"),
+                            ifelse(section %in% "nominal", " (in nominal dollar values)", ""),
+                            "."))
+      } else { #other values qualified and there are no more
+        str0<-""
       }
       
-    }
-    
-    #ABSOLUTE VALUE
-    # str0<-ifelse(absvalue==F, paste0(str0, ")"), str0)
-    if (absvalue==T) {
-      # str0.abs<-ifelse((metric==paste0("YR10") & section %in% "absolute"), 
-      #              paste0(str0, ","), str0)
-      str0.abs<-paste0(ifelse(sign(absval) == 1, "", "-"), preunit, 
-                       paste0(xunits(abs(absval)), collapse = ""), 
-                       ifelse(postunit=="", "", paste0(" ", postunit)),
-                       " in absolute change terms")
-    }
-    
-    
-    if (absvalue == T & pctvalue == T) {
-      str0<-ifelse(orgby == "pct", 
-                   paste0(str0, str0.pct, " and ", str0.abs,")"),   
-                   paste0(str0, str0.abs, " and ", str0.pct,")") ) 
+      #Yes!
+    } else {
+
+      str0<-paste0(str0, org, " (")
       
-    } else if (absvalue == T & pctvalue == F) {
-      str0<-(paste0(str0, str0.abs,")"))  
-    } else if (absvalue == F & pctvalue == T) {
-      str0<-(paste0(str0, str0.pct,")"))  
+      #PERCENT VALUE
+      if (pctvalue == T) {
+        #Nominal Values
+        str0.pct<-xunitspct(pctval)
+        
+                #REAL TERMS
+        if (metric %in% "YR10" & section %in% "real terms") { #if a correct value and realterms = T (realterms only applicable for money aka revenue or price)
+          datcol.real<-dat[which(colnames(dat) %in% paste0(metric, ".infl.pct"))]
+          val.real<-100*(datcol.real[lv,])
+          
+          str0.pct<-paste0(str0.pct,  
+                       ", ", 
+                       xunitspct(val.real),
+                       " in real terms")
+          
+        }
+        
+      }
+
+      #ABSOLUTE VALUE
+      # str0<-ifelse(absvalue==F, paste0(str0, ")"), str0)
+      if (absvalue==T) {
+        # str0.abs<-ifelse((metric==paste0("YR10") & section %in% "absolute"), 
+        #              paste0(str0, ","), str0)
+        str0.abs<-paste0(ifelse(sign(absval) == 1, "", "-"), preunit, 
+                         paste0(xunits(abs(absval)), collapse = ""), 
+                         ifelse(postunit=="", "", paste0(" ", postunit)),
+                     " in absolute change terms")
     }
-  }
+
+ 
+      if (absvalue == T & pctvalue == T) {
+        str0<-ifelse(orgby == "pct", 
+                     paste0(str0, str0.pct, " and ", str0.abs,")"),   
+                     paste0(str0, str0.abs, " and ", str0.pct,")") ) 
+        
+      } else if (absvalue == T & pctvalue == F) {
+        str0<-(paste0(str0, str0.abs,")"))  
+      } else if (absvalue == F & pctvalue == T) {
+        str0<-(paste0(str0, str0.pct,")"))  
+      }
+    }
   
   return(str0)
 }
@@ -816,39 +814,39 @@ modnum<-function(x, divideby = 1000, commaseperator = T) {
 
 
 xunits<-function(temp00, combine=T) {
-  
+
   temp00<-sum(as.numeric(temp00))
   if (is.na(temp00)) {
     out<-NA
   } else {
     
-    sigfig<-format(temp00, digits = 3, scientific = TRUE)
-    sigfig0<-as.numeric(substr(x = sigfig, start = (nchar(sigfig)-1), stop = nchar(sigfig)))
-    
-    if (sigfig0<=5) {
-      # if (sigfig0<4) {
-      unit<-""
-      x<-format(x = temp00, big.mark = ",", digits = 0, scientific = F)
-      # } else if (sigfig0>=4 & sigfig0<6) {
-      #   unit<-" thousand"
-      # x<-round(temp00/1e3, digits = 1)
-      # } else if (sigfig0==5) {
-      #   unit<-" thousand"
-      #   x<-round(temp00/1e3, digits = 0)
-    } else if (sigfig0>=6 & sigfig0<9) {
-      unit<-" million"
-      x<-round(temp00/1e6, digits = 1)
-    } else if (sigfig0>=9 & sigfig0<12) {
-      unit<-" billion"
-      x<-round(temp00/1e9, digits = 1)
-    } else if (sigfig0>=12) {
-      unit<-" trillion"
-      x<-round(temp00/1e12, digits = 1)
-    }
-    
-    out<-ifelse(combine==T, paste0(x, unit), list(x, unit))
+  sigfig<-format(temp00, digits = 3, scientific = TRUE)
+  sigfig0<-as.numeric(substr(x = sigfig, start = (nchar(sigfig)-1), stop = nchar(sigfig)))
+  
+  if (sigfig0<=5) {
+    # if (sigfig0<4) {
+    unit<-""
+    x<-format(x = temp00, big.mark = ",", digits = 0, scientific = F)
+    # } else if (sigfig0>=4 & sigfig0<6) {
+    #   unit<-" thousand"
+    # x<-round(temp00/1e3, digits = 1)
+    # } else if (sigfig0==5) {
+    #   unit<-" thousand"
+    #   x<-round(temp00/1e3, digits = 0)
+  } else if (sigfig0>=6 & sigfig0<9) {
+    unit<-" million"
+    x<-round(temp00/1e6, digits = 1)
+  } else if (sigfig0>=9 & sigfig0<12) {
+    unit<-" billion"
+    x<-round(temp00/1e9, digits = 1)
+  } else if (sigfig0>=12) {
+    unit<-" trillion"
+    x<-round(temp00/1e12, digits = 1)
   }
   
+  out<-ifelse(combine==T, paste0(x, unit), list(x, unit))
+  }
+    
   return(out)
 }
 
@@ -922,7 +920,7 @@ funct_counter<-function(counter0) {
   counter00<-ifelse(as.numeric(counter0) %in% 0, 1, as.numeric(counter0)+1)
   counter<-numbers0(c(counter00, as.numeric(paste0("1", 
                                                    paste(rep_len(x = 0, length.out = (nchar(counter0)-1)), 
-                                                         collapse = "")))))[1]
+                                                   collapse = "")))))[1]
   return(counter)
 }
 
@@ -940,7 +938,7 @@ ageoffile<-function(path) {
 
 
 temp.save<-function(df.dat, minyr, maxyr, filename00, ending, csvname, Tfootnotes=NA, reg, st) {
-  
+
   if (sum(names(df.dat) %in% paste0("X", maxyr))==1) {  #If the names of the columns are "X2017", make them "2017"
     for (i in 1:length(minyr:maxyr)) {
       idx<-which(names(df.dat) %in% paste0("X", (minyr:maxyr)[i]))
@@ -977,7 +975,7 @@ temp.save<-function(df.dat, minyr, maxyr, filename00, ending, csvname, Tfootnote
               file=filename0, 
               sep = ",",
               row.names=FALSE, col.names = F, append = F)
-  
+
   write.table(ifelse((st %in% c("Region", "United States") | st %in% reg), 
                      paste0(reg, " Region"), 
                      paste(trimws(reg), " Region, ", st)),  
@@ -1021,7 +1019,7 @@ funct_save<-function(Tfootnotes = NA,
                      csvname1000, csvname, 
                      st, reg, xreg, xsect, xstate, dir.outputtables, state.codes, 
                      temp.code = NA,
-                     temp.ref = NA,
+                     # temp.ref = NA,
                      temp.print = NA,
                      webtool = NA) {
   
@@ -1033,35 +1031,35 @@ funct_save<-function(Tfootnotes = NA,
   filename00<-paste0(dir.outputtables, folder, '/',
                      FilenameAuto(xreg, xsect, xstate, 
                                   xdesc =  paste0(folder, "_",area,"_XXX.csv")))
-  # area,'_', 
-  # gsub(pattern = " ", replacement = "", simpleCap(place)), 
-  # '_', folder,'_XXX.csv')
-  # 
+                     # area,'_', 
+                     # gsub(pattern = " ", replacement = "", simpleCap(place)), 
+                     # '_', folder,'_XXX.csv')
+                     # 
   if (!(length(webtool) %in% 1)){
-    #Webtool
-    webtool<-data.frame(webtool)
-    webtool$Footnotes<-as.character(list2string.webtool(x = webtool$Footnotes))  #Convert Footnote from list
-    
-    #add State and Region collumns
-    if (sum(names(webtool) %in% c("State", "Region"))>1) {
-      webtool<-webtool
-    } else if (sum(names(webtool) %in% "State")>0) {
-      webtool<-cbind.data.frame(Region=reg, 
-                                webtool)
-    } else {
-      webtool<-cbind.data.frame(Region=reg, 
-                                State = st, 
-                                webtool)
-    }
-    
-    #If the names of the columns are "X2017", make them "2017"
-    if (sum(names(webtool) %in% paste0("X", maxyr))==1) {
-      for (i in 1:length(minyr:maxyr)) {
-        idx<-which(names(webtool) %in% paste0("X", (minyr:maxyr)[i]))
-        names(webtool)[idx]<-as.character((minyr:maxyr)[i])
-      }    
-    }  
-    
+  #Webtool
+  webtool<-data.frame(webtool)
+  webtool$Footnotes<-as.character(list2string.webtool(x = webtool$Footnotes))  #Convert Footnote from list
+  
+  #add State and Region collumns
+  if (sum(names(webtool) %in% c("State", "Region"))>1) {
+    webtool<-webtool
+  } else if (sum(names(webtool) %in% "State")>0) {
+    webtool<-cbind.data.frame(Region=reg, 
+                              webtool)
+  } else {
+    webtool<-cbind.data.frame(Region=reg, 
+                              State = st, 
+                              webtool)
+  }
+  
+  #If the names of the columns are "X2017", make them "2017"
+  if (sum(names(webtool) %in% paste0("X", maxyr))==1) {
+    for (i in 1:length(minyr:maxyr)) {
+      idx<-which(names(webtool) %in% paste0("X", (minyr:maxyr)[i]))
+      names(webtool)[idx]<-as.character((minyr:maxyr)[i])
+    }    
+  }  
+  
   }
   
   
@@ -1076,13 +1074,13 @@ funct_save<-function(Tfootnotes = NA,
     temp.print<-temp.save(df.dat = temp.print, minyr, maxyr, filename00, ending = "print", csvname = csvname1000, Tfootnotes, reg, st) 
   }
   
-  #Reference
-  if (!(length(temp.ref) %in% 1)) {# if (!(is.na(temp.ref))){
-    temp.ref<-temp.save(df.dat = temp.ref, minyr, maxyr, filename00, ending = "ref", csvname = csvname, Tfootnotes, reg, st) 
-  }
+  # #Reference
+  # if (!(length(temp.ref) %in% 1)) {# if (!(is.na(temp.ref))){
+  #   temp.ref<-temp.save(df.dat = temp.ref, minyr, maxyr, filename00, ending = "ref", csvname = csvname, Tfootnotes, reg, st) 
+  # }
   
   return(list("temp.code" = (temp.code), 
-              "temp.ref" = (temp.ref), 
+              # "temp.ref" = (temp.ref), 
               "temp.print" = (temp.print), 
               "webtool" = (webtool)))
   
@@ -1101,45 +1099,45 @@ FilenameAuto<-function(xreg, xsect, xstate, xdesc){
   State1<-State
   State1[grep(pattern = "Florida", x = State)]<-"Florida"
   State1[grep(pattern = "Hawai`i", x = State)]<-"Hawaii"
-  
+
   statereg <- data.frame(State = State, 
-                         State1 = State1, 
-                         fips = c(0, 1 ,2 ,6 ,9 ,10, 12, 12, 13, 15, 22,23,24,25,28,33,34,36,37,41,44,45,48,51,53), 
-                         Region = c("United States", "Gulf of Mexico", "North Pacific", "Pacific", "New England", 
-                                    "Mid-Atlantic", "South Atlantic", "Gulf of Mexico", "South Atlantic", "Western Pacific (Hawai`i)", 
-                                    "Gulf of Mexico", "New England", "Mid-Atlantic", "New England", 
-                                    "Gulf of Mexico", "New England", "Mid-Atlantic", "Mid-Atlantic", 
-                                    "South Atlantic", "Pacific", "New England", "South Atlantic", 
-                                    "Gulf of Mexico",  "Mid-Atlantic", "Pacific"), 
-                         abbvst = c("US", "AL", "AK", "CA", "CT", "DE", "EFL", "WFL", "GA", "HI", 
-                                    "LA", "ME", "MD", "MA", "MI", "NH", "NJ", "NY",  
-                                    "NC", "OR", "RI", "SC", "TX",  "VA", "WA"), 
-                         abbvreg = c("US", "GOM", "NP", "Pac", "NE", 
-                                     "MA", "SA", "GOM", "SA", "WP", 
-                                     "GOM", "NE", "MA", "NE", 
-                                     "GOM", "NE", "MA", "MA", 
-                                     "SA", "Pac", "NE", "SA", 
-                                     "GOM",  "MA", "Pac"), 
-                         xstate = c("0", "1", "1", "1", "1", "1", "1", "2", "2", "1", "3", "2", "2", "3", "4", 
-                                    "4", "3", "4", "3", "2", "5", "4", "5",  "5", "3"), 
-                         xreg = c("0", "7", "1", "2", "4", "5", "6", "7", "6", "3", "7", "4", "5", "4", "7", 
-                                  "4", "5", "5", "6", "2", "4", "6", "7",  "5", "2"))
+                          State1 = State1, 
+                          fips = c(0, 1 ,2 ,6 ,9 ,10, 12, 12, 13, 15, 22,23,24,25,28,33,34,36,37,41,44,45,48,51,53), 
+                          Region = c("United States", "Gulf of Mexico", "North Pacific", "Pacific", "New England", 
+              "Mid-Atlantic", "South Atlantic", "Gulf of Mexico", "South Atlantic", "Western Pacific (Hawai`i)", 
+              "Gulf of Mexico", "New England", "Mid-Atlantic", "New England", 
+              "Gulf of Mexico", "New England", "Mid-Atlantic", "Mid-Atlantic", 
+              "South Atlantic", "Pacific", "New England", "South Atlantic", 
+              "Gulf of Mexico",  "Mid-Atlantic", "Pacific"), 
+                          abbvst = c("US", "AL", "AK", "CA", "CT", "DE", "EFL", "WFL", "GA", "HI", 
+              "LA", "ME", "MD", "MA", "MI", "NH", "NJ", "NY",  
+              "NC", "OR", "RI", "SC", "TX",  "VA", "WA"), 
+                          abbvreg = c("US", "GOM", "NP", "Pac", "NE", 
+                                      "MA", "SA", "GOM", "SA", "WP", 
+                                      "GOM", "NE", "MA", "NE", 
+                                      "GOM", "NE", "MA", "MA", 
+                                      "SA", "Pac", "NE", "SA", 
+                                      "GOM",  "MA", "Pac"), 
+                          xstate = c("0", "1", "1", "1", "1", "1", "1", "2", "2", "1", "3", "2", "2", "3", "4", 
+            "4", "3", "4", "3", "2", "5", "4", "5",  "5", "3"), 
+                          xreg = c("0", "7", "1", "2", "4", "5", "6", "7", "6", "3", "7", "4", "5", "4", "7", 
+          "4", "5", "5", "6", "2", "4", "6", "7",  "5", "2"))
   
-  
+
   ###
   
   
   ref<-data.frame(code = c(1, 2, 3, 4), 
-                  element = c("xsect", "xsect", "xsect", "xsect"), 
-                  meaning = c("ManagCont", "Comm", "Rec", "MarEcon"))
+             element = c("xsect", "xsect", "xsect", "xsect"), 
+             meaning = c("ManagCont", "Comm", "Rec", "MarEcon"))
   
   xdesc<-paste0(unique(as.character(statereg$abbvreg[statereg$xreg %in% xreg])),#"Reg",
                 "_", ref$meaning[ref$code %in% xsect], #section
                 ifelse(xstate == 0,
-                       "",
-                       paste0("_", unique(as.character(statereg$abbvst[statereg$xstate %in% xstate &
-                                                                         statereg$xreg %in% xreg])))#"St"
-                ),
+                              "",
+                              paste0("_", unique(as.character(statereg$abbvst[statereg$xstate %in% xstate &
+                                                                    statereg$xreg %in% xreg])))#"St"
+                              ),
                 "_",
                 xdesc)
   
@@ -1150,7 +1148,7 @@ FilenameAuto<-function(xreg, xsect, xstate, xdesc){
   
   filename0<-paste0(xreg, "_", xsect, "_", xstate, "_", xdesc)
   
-  return(filename0) 
+ return(filename0) 
 }
 
 ###***Metadata####
