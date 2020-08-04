@@ -15,6 +15,10 @@ library(data.table) # := to tag species codes
 require(plyr)  #ddply function
 library(sas7bdat)
 
+#List Management
+library(rlist)
+library(pipeR)
+
 #RMarkdown
 library(rmarkdown)
 library(knitr)
@@ -182,7 +186,7 @@ Footnotes.list.Common<-list(
   "ft_Data" = "See data sources section for more information about where each region or state's data comes from." ,
   "ft_999" = "In this table, '<1' = 0-999 fish, and '1' = 1,000-1,499 fish.",
   "ft_na" = "'NA' = not available.", 
-  "ft_FEUStool" = "Summary data is available online in the FEUS webtool. [Available at: https://www.st.nmfs.noaa.gov/data-and-tools/FEUS/explore-the-data.]"
+  "ft_FEUStool" = "Summary data is available online in the FEUS webtool. [Available at: https://www.fisheries.noaa.gov/data-tools/fisheries-economics-united-states-interactive-tool.]"
 )
 
 reg.order<-c("North Pacific", "Pacific", "Western Pacific (Hawai`i)", "New England", "Mid-Atlantic", "South Atlantic", "Gulf of Mexico") 
@@ -1017,7 +1021,7 @@ funct_save<-function(Tfootnotes = NA,
                      place, area, folder,
                      maxyr, minyr, 
                      csvname1000, csvname, 
-                     st, reg, xreg, xsect, xstate, dir.outputtables, state.codes, 
+                     st, reg, xreg, xsect, xstate, dir.outputtables, statereg, 
                      temp.code = NA,
                      # temp.ref = NA,
                      temp.print = NA,
