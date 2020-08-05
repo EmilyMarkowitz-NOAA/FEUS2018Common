@@ -96,29 +96,48 @@ dir.create(paste0(dir.outputtables, "/nationaltables/")) #Save files for FEUS we
 dir.nattables<-paste0(dir.outputtables, "/nationaltables/")
 
 ######SAVE WORKING FILES########
-#From Specific Files
-listfiles<-list.files(path = dir.scripts, pattern = date0) 
 
-for (i in 1:length(listfiles)){
-  file.copy(from = paste0(dir.scripts, listfiles[i]), 
-            to = paste0(dir.out, "/rscripts/", 
-                        gsub(pattern = date0, replacement = date00, x = listfiles[i])), 
+#Word styles file (from Common)
+file.copy(from = paste0(dir.parent, "/FEUS",maxyr,"Common/word-styles-reference.docx"), 
+          to = paste0(dir.out, "/rscripts/word-styles-reference.docx"), 
+          overwrite = T)
+
+#From Specific Files
+listfiles<-list.files(path = dir.scripts) 
+listfiles0<-c(listfiles[grepl(pattern = "\\.r", 
+                              x = listfiles, ignore.case = T)], 
+              listfiles[grepl(pattern = "\\.docx", 
+                              x = listfiles, ignore.case = T)])
+listfiles0<-listfiles0[!(grepl(pattern = "~",ignore.case = T, x = listfiles0))]
+
+
+for (i in 1:length(listfiles0)){
+  file.copy(from = paste0(dir.scripts, listfiles0[i]), 
+            to = paste0(dir.out, "/rscripts/", listfiles0[i]), 
             overwrite = T)
 }
 
 #From Common Files
-listfiles<-list.files(path = paste0(dir.parent, "/Common/"), pattern = date0) 
+listfiles0<-c(list.files(path = paste0(dir.parent, "/FEUS",maxyr,"Common/"), 
+                         pattern = "\\.r", ignore.case = T)) 
+listfiles0<-listfiles0[!(grepl(pattern = "\\.rproj", 
+                               x = listfiles0, ignore.case = T))]
 
-for (i in 1:length(listfiles)){
-  file.copy(from = paste0(dir.out, listfiles[i]), 
-            to = paste0(dir.out, "/rscripts/", gsub(pattern = date0, replacement = date00, x = listfiles[i])), 
+for (i in 1:length(listfiles0)){
+  file.copy(from = paste0(dir.parent, "/FEUS",maxyr,"Common/", listfiles0[i]), 
+            to = paste0(dir.out, "/rscripts/", listfiles0[i]), 
             overwrite = T)
 }
 
-#Word styles file (from Common)
-file.copy(from = paste0(dir.parent, "/Common/word-styles-reference.docx"), 
-          to = paste0(dir.out, "/rscripts/word-styles-reference.docx"), 
-          overwrite = T)
+#Common workbook files
+listfiles0<-list.files(path = paste0(dir.parent, "/FEUS",maxyr,"Common/"), pattern = ".csv") 
+
+for (i in 1:length(listfiles0)){
+  file.copy(from = paste0(paste0(dir.parent, "/FEUS",maxyr,"Common/"), listfiles0[i]), 
+            to = paste0(dir.out, "/rawdata/", listfiles0[i]), 
+            overwrite = T)
+}
+
 
 
 
