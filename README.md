@@ -20,7 +20,7 @@ Main website: https://www.fisheries.noaa.gov/national/sustainable-fisheries/fish
 
 This script manages the production of the Fisheries Economics of the US report. This is a national-level report that provides ten years of economic information, impacts, and analyses related to U.S. commercial and recreational fishing activities and fishing-related industries. I am working to contemporize this iconic report by writing reproducible code using R and RMarkdown, which produces several report outputs and JavaScript files for the interactive FEUS online tool. All of this work has gone into improving this nationally regarded report for the many who reference it and making the process of producing it more streamlined, reproducible, and efficient.
 
-This R project provides the standardizing functions and content for the: 
+**This R project provides the standardizing functions and content for the: **
  - **Commerical Section**
  - **Recreational Section**
  - **Marine Economy Section**
