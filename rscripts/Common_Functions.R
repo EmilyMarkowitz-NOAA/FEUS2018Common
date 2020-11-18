@@ -87,6 +87,7 @@ dir.create(paste0(dir.out, "/policy/")) #Save word files
 dir.create(paste0(dir.out, "/chapters/")) #Save word files for policy subsection
 dir.chapters<-paste0(dir.out, "/chapters/")
 dir.create(paste0(dir.out, "/rawdata/")) #Save word files for policy subsection
+dir.rawdata<-paste0(dir.out, "rawdata/")
 dir.create(paste0(dir.out, "/rscripts/")) #scripts
 
 dir.outputtables<-paste0(dir.out, "/outputtables/")
@@ -627,6 +628,7 @@ tolower2<-function(str0, capitalizefirst=F) {
         "South Atlantic", 
         #For specific Species
         "Spanish", "Gulf", "Bringham's", "Von Siebold's", "Pfluger's", "African", "Eurpoean",
+        "Southern kingfish", "Southern flounder",
         # Other
         "Atlantic", "American", 
         "Atka", "Chinook", "Great Lakes") 
@@ -961,6 +963,7 @@ ageoffile<-function(path) {
 
 
 
+
 ###***File Saving####
 
 
@@ -1176,6 +1179,28 @@ FilenameAuto<-function(xreg, xsect, xstate, xdesc){
   filename0<-paste0(xreg, "_", xsect, "_", xstate, "_", xdesc)
   
  return(filename0) 
+}
+
+# useful for keeping a version of the data you are working on for each run
+# made for csv, xlsx, and sas7bdat files
+read_save<-function(dir.in, dir.out, name, sheet = NA){
+  filetype<-strsplit(x = name, split = "\\.")[[1]][2]
+  if (filetype %in% "csv") {
+    df <- read.csv(paste0(dir.in, name), stringsAsFactors = FALSE)
+    
+  } else if (filetype %in% "sas7bdat") {
+    df <- read.sas7bdat(paste0(dir.in, name))
+    
+  } else if (filetype %in% "xlsx") { 
+    if (is.na(sheet)){
+      df <- read.xlsx2(file = paste0(dir.data, name), sheetName = sheet)
+    } else {
+      df <- read.xlsx(file = paste0(dir.data, name))      
+    }
+  }
+  name<-gsub(pattern = filetype, replacement = "csv", x = name)
+  write.csv(x = df, file = paste0(dir.out, name))
+  return(df)
 }
 
 ###***Metadata####
