@@ -1,50 +1,80 @@
 ################COMMON FUNCTIONS TO BE USED IN ALL SECTIONS#########################
 
 #####LIBRARY FUNCTIONS#####
-#Seperating species by taxonomic group
-# install.packages("remotes")
-# remotes::install_github("ropensci/taxize")
-library(taxize)
 
-# Data Managment
-library(tidyr)
-library(reshape2)
-library(tidyverse)
-library(filesstrings)
-library(data.table) # := to tag species codes
-require(plyr)  #ddply function
-library(sas7bdat)
 
-#List Management
-library(rlist)
-library(pipeR)
+PKG <- c("readr", "data.table","plyr","dplyr", "IndexNumR", 
+         
+         #Seperating species by taxonomic group
+         # install.packages("remotes")
+         # remotes::install_github("ropensci/taxize")
+         "taxize", 
+         
+         # Data Managment
+         "tidyr",
+         "reshape2",
+         "tidyverse",
+         "filesstrings", 
+         "data.table", # := to tag species codes
+         "plyr",  #ddply function
+         "sas7bdat", 
+         
+         # List Management
+         "rlist",
+         "pipeR", 
+         
+         #RMarkdown
+         "rmarkdown",
+         "knitr",
+         "gridExtra", 
+         "ggpubr",
+         "magrittr", 
+         "flextable", 
+         
+         #Excel File Management
+         "officer",
+         "rJava", 
+         "xlsx",
+         "readxl",
+         
+         #Visuals
+         "ggplot2",
+         
+         #Package Management
+         # library(roxygen2)
+         "devtools",
+         
+         # Presentations
+         # remotes::install_github('yihui/xaringan')
+         "xaringan",
+         "tidyverse", 
+         "stargazer", 
+         
+         # Make it pretty!
+         "dichromat",
+         
+         # Fonts
+         "extrafont",
+         # extrafont::font_import()
+         #windowsFonts()
+         
+         
+         # install.packages("jsonlite", repos="http://cran.r-project.org")
+         "jsonlite" #https://www.opencpu.org/posts/jsonlite-a-smarter-json-encoder/
+)
 
-#RMarkdown
-library(rmarkdown)
-library(knitr)
-library(gridExtra)
+for (p in PKG) {
+  if(!require(p,character.only = TRUE)) {  
+    install.packages(p)
+    require(p,character.only = TRUE)}
+}
 
-#Excel File Management
-library(officer)
-library(xlsx)
+options(htmltools.dir.version = FALSE)
 
-#Visuals
-library(ggplot2)
-library(dichromat)
-library(readxl)
 
-#Package Management
-library(roxygen2)
-library(devtools)
 
-#Fonts
-library(extrafont)
 loadfonts()
-# extrafont::font_import()
-#windowsFonts()
-# install.packages("jsonlite", repos="http://cran.r-project.org")
 
-library(jsonlite) #https://www.opencpu.org/posts/jsonlite-a-smarter-json-encoder/
 
 options(java.parameters = "-Xmx1000m")
 options(scipen=10000)
