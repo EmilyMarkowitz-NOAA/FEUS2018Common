@@ -1022,7 +1022,8 @@ whoismissing <- function(df, cols) {
                             data.frame(matrix(data = NA, 
                                               ncol = (ncol(df)-length(cols)), 
                                               nrow = nrow(missing))))
-  names(missing)[!(names(df) %in% names(cols.list))]<-c(names(df)[!(names(df) %in% names(cols.list))])
+  
+  names(missing)[!(names(missing) %in% names(cols.list))]<-names(df)[!(names(df) %in% names(cols.list))]
   
   #Add missing to df
   df<-rbind.data.frame(df, 
