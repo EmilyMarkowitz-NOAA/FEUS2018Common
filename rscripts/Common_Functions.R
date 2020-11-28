@@ -3,7 +3,7 @@
 #####LIBRARY FUNCTIONS#####
 
 
-PKG <- c("readr", "data.table","plyr","dplyr", "IndexNumR", 
+PKG <- c("readr", "data.table","plyr","dplyr", 
          
          #Seperating species by taxonomic group
          # install.packages("remotes")
@@ -992,9 +992,62 @@ ageoffile<-function(path) {
 }
 
 
-
+whoismissing <- function(df, cols) {
+  
+  # What are the unique values we want for each of the items in each of the columns?  
+  cols.list<-list()
+  if (class(cols) %in% "list") {
+    cols.list<-cols
+  } else { #(class(cols) %in% "character") {
+    for (i in 1:length(cols)) {
+      cols.list[[i]]<-unique(df[,cols[i]])
+      names(cols.list)[i]<-cols[i]
+    }
+  }
+  
+  
+  complete<-data.frame(cols.list[[1]])
+  names(complete)<-names(cols.list)[1]
+  
+  for (i in 2:length(cols)){
+    complete<-merge.data.frame(x = complete, 
+                               y = cols.list[[i]])
+    names(complete)[i]<-names(cols.list)[i]
+  }
+  
+  #Who is missing
+  missing<-setdiff(complete, unique(df[,names(cols.list)]))
+  
+  missing<-cbind.data.frame(missing, 
+                            data.frame(matrix(data = NA, 
+                                              ncol = (ncol(df)-length(cols)), 
+                                              nrow = nrow(missing))))
+  names(missing)[!(names(df) %in% names(cols.list))]<-c(names(df)[!(names(df) %in% names(cols.list))])
+  
+  #Add missing to df
+  df<-rbind.data.frame(df, 
+                       missing[,match(x = names(missing), 
+                                      table = names(df))])
+  
+  return(df)
+}
 
 ###***File Saving####
+
+ReplaceMid<-function(colnames, temp) {
+  for (c0 in 1:length(colnames)) {
+    #If a middle value of the timeseries of this column (c) is 0/NaN/NA
+    #Change the currently 0/NaN/NA value to the previous available non-0/NaN/NA value
+    if (sum(temp[,colnames[c0]] %in% c(0, NA, NaN, NULL, ""))>0) {
+      troublenumber<-which(temp[,colnames[c0]] %in% c(0, NA, NaN, NULL, ""))
+      for (r in 1:length(troublenumber)){
+        findlastvalue<-temp[troublenumber[r]-1, colnames[c0]][1]
+        temp[troublenumber[r],colnames[c0]]<-findlastvalue
+      }
+    }
+  }
+  return(temp)
+}
 
 
 temp.save<-function(df.dat, minyr, maxyr, filename00, ending, csvname, Tfootnotes=NA, reg, st) {
@@ -1077,7 +1130,7 @@ funct_save<-function(Tfootnotes = NA,
                      place, area, folder,
                      maxyr, minyr, 
                      csvname1000, csvname, 
-                     st, reg, xreg, xsect, xstate, dir.outputtables, statereg, 
+                     st, reg, xreg, xsect, xstate, dir.outputtables, #statereg, 
                      temp.code = NA,
                      # temp.ref = NA,
                      temp.print = NA,
