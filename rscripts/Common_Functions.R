@@ -388,6 +388,7 @@ funct_df2js<-function(df.dat, minyr, maxyr) {
   # str0<-gsub(pattern = '\\\"', replacement = '"', x = str0, fixed = T)
   str0<-gsub(pattern = '\\\"', replacement = '', x = str0, fixed = T)
   str0<-gsub(pattern = '\\.\\]', replacement = '\\.\\"\\]', x = str0)
+  str0<-gsub(pattern = '\\)\\]', replacement = '\\)\\"\\]', x = str0)
 
 
   #make year numeric
